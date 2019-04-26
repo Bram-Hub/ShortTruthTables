@@ -3,6 +3,9 @@
 #include <gtkmm.h>
 #include "STTModel.h"
 
+/*
+Organization for the Add Conclusion Dialog box
+*/
 class ConcDialog{
 private:
 	Gtk::Dialog* concDialog;

@@ -3,6 +3,13 @@
 
 #include "../TruthValues.h"
 #include <string>
+
+/*
+This file has the organization for all the different types of Expressions.
+There is a lot of inheritance so that common functions can be easily called between different types of expressions without specifying
+virtual functions are defined for their children
+*/
+
 namespace ShortTruthTables{
 
 class Expression{

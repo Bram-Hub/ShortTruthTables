@@ -1,5 +1,15 @@
 #include "STTModel.h"
 
+/*
+Overarching file for the ShortTruthTables model
+*/
+
+/*
+Add a premise to the model
+Takes in a string, then parses that into an expression
+sets the value of the premise expression to true
+updates the constants that are in the model and where they appear
+*/
 void ShortTruthTables::STTModel::addPremise(std::string preorder){
 	ParsedExpression* p = new ParsedExpression(preorder);
 	p->setTruthValue(true);
@@ -14,6 +24,13 @@ void ShortTruthTables::STTModel::addPremise(std::string preorder){
 	}
 }
 
+/*
+Adds conclusion to the model
+Makes sure there is not already a conclusion
+Takes in a string and parses it into an expression
+Assigns this expression to be false
+Adds any new constants to constant_uses and updates that any existing constants are being used here
+*/
 bool ShortTruthTables::STTModel::addConclusion(std::string preorder){
 	bool retval;
 	if(this->conclusion == NULL){
@@ -35,6 +52,7 @@ bool ShortTruthTables::STTModel::addConclusion(std::string preorder){
 	return retval;
 }
 
+//Assigns a truth value to an expression
 bool ShortTruthTables::STTModel::assignTruthValue(int expNum, int pos_in_string, bool tval){
 	if(expNum == -1){
 		Expression* exp = this->conclusion->expressionAtPosition(pos_in_string);
@@ -45,7 +63,29 @@ bool ShortTruthTables::STTModel::assignTruthValue(int expNum, int pos_in_string,
 	}
 }
 
-bool ShortTruthTables::STTModel::can_assign_TVal(int expNum, int pos_in_string, bool tval){
+//check if the truth value can be assigned to an atomic value based on that values previous assignments
+bool ShortTruthTables::STTModel::can_assign_TVal_var(int expNum, int pos_in_string, bool tval){
+	Expression* exp;
+	if(expNum == -1){
+		exp = this->conclusion->expressionAtPosition(pos_in_string);
+	}else{
+		exp = this->getPremise(expNum)->expressionAtPosition(pos_in_string);
+	}
+	if(exp->getExpressionType() == "AtomicValue"){ //if trying to assign a truth value to a variable
+		char c = exp->getExpChar()[0]; //access which variable it is
+		std::vector<Expression*> uses = this->constant_uses[c]; //get a vector of all the times this constant is used
+		for(int i = 0; i < uses.size(); i++){
+			if((tval && uses[i]->isAssignedTrue()) || (!tval && uses[i]->isAssignedFalse())){
+				//if what you are hoping to assign matches how that variable has been used somewhere already, it can be assigned that way
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+//check if the truth value can be assigned based off of the rest of the expression it is in
+bool ShortTruthTables::STTModel::can_assign_TVal_expr(int expNum, int pos_in_string, bool tval){
 	Expression* exp;
 	if(expNum == -1){
 		exp = this->conclusion->expressionAtPosition(pos_in_string);
@@ -53,13 +93,6 @@ bool ShortTruthTables::STTModel::can_assign_TVal(int expNum, int pos_in_string, 
 		exp = this->getPremise(expNum)->expressionAtPosition(pos_in_string);
 	}
 	if(exp->getExpressionType() == "AtomicValue"){
-		char c = exp->getExpChar()[0];
-		std::vector<Expression*> uses = this->constant_uses[c];
-		for(int i = 0; i < uses.size(); i++){
-			if((tval && uses[i]->isAssignedTrue()) || (!tval && uses[i]->isAssignedFalse())){
-				return true;
-			}
-		}
 		if(exp->parent != NULL && exp->parent->canAssignChild(exp, tval)){
 			return true;
 		}
@@ -68,6 +101,7 @@ bool ShortTruthTables::STTModel::can_assign_TVal(int expNum, int pos_in_string, 
 		return (exp->parent != NULL && exp->parent->canAssignChild(exp, tval)) || exp->canAssignSelf(tval);
 	}
 }
+
 
 ShortTruthTables::ParsedExpression* ShortTruthTables::STTModel::getPremise(int i){
 	if(i >= premises.size()) return NULL;

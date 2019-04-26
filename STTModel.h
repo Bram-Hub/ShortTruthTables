@@ -7,6 +7,11 @@
 #include <vector>
 #include <string>
 
+/*
+File for the overarching ShortTruthTables model that wraps everything together. 
+There are a series of premises, a conclusion, and also all of the constants used.
+*/
+
 namespace ShortTruthTables{
 
 class STTModel
@@ -28,8 +33,12 @@ public:
 	//tval true or false
 	//returns: bool: true if succesfull, false if exp already had a value or didn't exist.
 	bool assignTruthValue(int expNum, int pos_in_string, bool tval);
-	bool can_assign_TVal(int expNum, int pos_in_string, bool tval);
+	bool can_assign_TVal_expr(int expNum, int pos_in_string, bool tval);
+	bool can_assign_TVal_var(int expNum, int pos_in_string, bool tval);
 
+	std::map<char, std::vector<Expression*> > get_constants(){
+		return constant_uses;
+	}
 	ParsedExpression* getPremise(int i);
 	ParsedExpression* getConclusion();
 	TruthValue valueOfExp(int expNum, int pos_in_string);

@@ -3,21 +3,32 @@
 #include <stdexcept>
 #include <gtkmm.h>
 
+
+/*
+This file contains logic for the Add Conclusion button
+*/
+
+//Open up the dialog box
 void ConcDialog::show(){
 	this->conclusionText->set_text("");
     int retval = concDialog->run();
 }	
 
+// They pressed cancel -> Hide the dialog box
 void ConcDialog::cancel_clicked(){
 	concDialog->hide();
 }
 
+/*
+This function reads in the string for the conclusion and attempts to update the model
+It then updates the UI so that it shows it
+*/
 void ConcDialog::accept_clicked(){
 	std::string conc_Exp = this->conclusionText->get_text();
 	try{
-		this->model->addConclusion(conc_Exp);
+		this->model->addConclusion(conc_Exp); //See if this string can be added to the model as a conclusion
 		ShortTruthTables::ParsedExpression* new_exp = this->model->getConclusion();
-		Gtk::Grid* conc_grid = Gtk::manage(new Gtk::Grid());
+		Gtk::Grid* conc_grid = Gtk::manage(new Gtk::Grid()); //update the UI with the new conclusion
     	Gtk::Box* conclusion_box;
 
     	refBuilder->get_widget("conclusion_box", conclusion_box);
@@ -36,6 +47,7 @@ void ConcDialog::accept_clicked(){
 				temp->show();
 				conc_grid->add(*temp);
 				if(new_exp->isTopLevel(new_exp->expressionAtPosition(j))){
+					// Start by assigning the conclusion to be false
 					Gtk::Label* true_label = Gtk::manage(new Gtk::Label("F"));
 					true_label->show();
 					conc_grid->attach_next_to(*true_label, *temp, Gtk::POS_BOTTOM ,1,1);

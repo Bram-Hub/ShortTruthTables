@@ -6,6 +6,8 @@
 #include <vector>
 #include <iostream>
 
+//Organization for string parser.  Called whenever the user inputs an expression as a String
+
 namespace ShortTruthTables{
 
 class ParsedExpression{
