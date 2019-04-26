@@ -1,8 +1,8 @@
 # ShortTruthTables
 ## Authors
 2015:
-Lee Saltzman
-2019 updates:
+Lee Saltzman  
+2019:
 Lindsay Zadunayski
 
 ## About
