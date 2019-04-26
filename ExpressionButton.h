@@ -5,6 +5,7 @@
 #include "STTModel.h"
 #include "ExpressionParser/ExpressionClasses.h"
 
+//This file has organization for the ExpressionButton.  It is called whenever the user attempts to assign a truth value
 
 class ExpressionButton : public Gtk::Button{
 private:

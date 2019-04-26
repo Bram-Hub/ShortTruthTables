@@ -3,6 +3,12 @@
 #include <gtkmm.h>
 #include "STTModel.h"
 
+/*
+This class is called when the 'Add Premise' button is pushed
+It is calling different interface details that are in interface_prototype.glade
+Logic is in the cpp file
+*/
+
 class PremDialog{
 private:
 	Gtk::Dialog* premDialog;

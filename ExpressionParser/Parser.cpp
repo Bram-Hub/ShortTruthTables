@@ -5,6 +5,11 @@
 #include <iostream>
 #include <stdexcept>
 
+/*
+This file has the logic for taking in user generated strings and parsing them into the proper expressions.
+It takes the string and makes it into the proper Expression class recursively
+*/
+
 class Expression;
 //(OP (OP CONST) CONST)
 //format:

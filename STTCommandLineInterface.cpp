@@ -7,6 +7,13 @@
 #include <vector>
 #include <stdexcept>
 
+
+/*
+This file runs the command line interface
+It is mostly I/O operations; logic is left to the relevant other files
+This commandLineInterface was not updated in 2019 with the rest of the other files; it may not exactly match the functionality of the UI anymore
+*/
+
 void optionsMenu(){
 	std::cout << "Options Menu: " << std::endl;
 	std::cout << "p : adds a premise" << std::endl;
